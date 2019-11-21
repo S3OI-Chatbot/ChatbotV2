@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <style>
+            #chat {
+                width: 40%;
+            }
+
+            #bot {
+                text-align: left;
+            }
+
+            #human {
+                text-align: center;
+                padding: 15px;
+                background-color: lightgreen;
+                border-radius: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <input id="message" type="text" name="message" placeholder="Where would you like to go"><br>
+            <button value="Submit" onclick="classify()">Submit</button>
+            <table id="chat">
+                <tr><td id="bot"><p>Hi how can i help you</p></td></tr>
+            </table>
+        </center>
+    </body>
+    <script>
+        async function classify() {
+            var msg = document.getElementById("message")
+            console.log(msg.value)
+
+            var table = document.getElementById("chat")
+
+            var row = table.insertRow(0)
+            var cell = row.insertCell(0);
+            var cell = row.insertCell(1);
+            var cell = row.insertCell(2);
+            var cell = row.insertCell(3);
+
+            var p = document.createElement("p");
+
+            p.innerHTML = msg.value;
+            p.id = "human"
+
+            cell.appendChild(p);
+
+
+            const response = await fetch('http://localhost:9000/messages/classify', {
+                method: 'POST',
+                body: JSON.stringify({message: msg.value}), // string or object
+                headers: {
+                'Content-Type': 'application/json'
+                }
+            });
+            const result = await response.json(); //extract JSON from the http response
+            // do something with myJson
+
+            row = table.insertRow(0);
+            var cell = row.insertCell(0)
+            cell.id="bot"
+            cell.innerHTML = "I think you want to go to the " + result.subject + " page, click <a href='https://www.mijndomein.nl" + result.link + "'>here</a> to go to that page."
+
+        }
+    </script>
+</html>
