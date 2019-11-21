@@ -1,12 +1,21 @@
 <html>
     <head>
         <style>
+            body{
+                background-color;
+            }
+
             #chat {
                 width: 40%;
+
             }
 
             #bot {
                 text-align: left;
+                background-color: lightgray;
+                display:inline;
+                padding:15px;
+                border-radius: 20px;
             }
 
             #human {
@@ -22,7 +31,7 @@
             <input id="message" type="text" name="message" placeholder="Where would you like to go"><br>
             <button value="Submit" onclick="classify()">Submit</button>
             <table id="chat">
-                <tr><td id="bot"><p>Hi how can i help you</p></td></tr>
+                <tr><td><p id="bot" >Hi how can i help you</p></td></tr>
             </table>
         </center>
     </body>
@@ -56,11 +65,14 @@
             });
             const result = await response.json(); //extract JSON from the http response
             // do something with myJson
+            
+            var p = document.createElement("p");
+            p.innerHTML = "I think you want to go to the " + result.subject + " page, click <a href='https://www.mijndomein.nl" + result.link + "'>here</a> to go to that page.";
+            p.id = "bot"
 
             row = table.insertRow(0);
             var cell = row.insertCell(0)
-            cell.id="bot"
-            cell.innerHTML = "I think you want to go to the " + result.subject + " page, click <a href='https://www.mijndomein.nl" + result.link + "'>here</a> to go to that page."
+            cell.appendChild(p)
 
         }
     </script>
